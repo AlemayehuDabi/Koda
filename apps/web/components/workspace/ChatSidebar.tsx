@@ -40,6 +40,7 @@ export function ChatSidebar() {
   }, [messages]);
 
   const handleSend = async () => {
+    setIsThinking(true);
     if (!input.trim() || isThinking) return;
 
     const userMessage: Message = {
@@ -47,6 +48,8 @@ export function ChatSidebar() {
       role: 'user',
       content: input,
     };
+
+    setMessages((prev) => [...prev, userMessage]);
 
     const { data, error } = await authClient.getSession();
 
@@ -65,8 +68,9 @@ export function ChatSidebar() {
       },
     };
 
+    setInput('');
+
     try {
-      setIsThinking(true);
       const res = await fetch('http://localhost:4000/api/generate', {
         method: 'POST',
         headers: {
@@ -118,6 +122,16 @@ export function ChatSidebar() {
 
               setCode(combinedCode); // this triggers your useEffect
               setStatus('Project ready'); // optional
+              // The message from the agents
+              // setMessages((prev) => [
+              //   ...prev,
+              //   {
+              //     id: Date.now().toString(),
+              //     role: 'assistant',
+              //     content: status || 'Project generated successfully.',
+              //     code: code,
+              //   },
+              // ]);
             }
           }
         }
@@ -126,8 +140,7 @@ export function ChatSidebar() {
       console.log('error: ', error);
     }
 
-    setMessages((prev) => [...prev, userMessage]);
-    setInput('');
+    // setInput('');
 
     setIsThinking(false);
   };

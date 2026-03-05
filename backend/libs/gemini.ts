@@ -10,7 +10,7 @@ const baseModel = (modelName: string) => {
   if (!singlton) {
     singlton = new ChatGoogleGenerativeAI({
       model: modelName,
-      apiKey: process.env.GOOGLE_API_KEY,
+      apiKey: process.env.GOOGLE_API_KEY!,
       streaming: true,
       maxOutputTokens: 8192,
     });
